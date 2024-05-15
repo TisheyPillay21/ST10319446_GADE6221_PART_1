@@ -10,9 +10,21 @@ public class PlatformSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] platformPrefabs;
     [SerializeField] private GameObject initialPlatform;
+    [SerializeField] private GameObject bossPlatform;
+    [SerializeField] private GameObject boss;
     [SerializeField] private int initalPlatformCount = 20;
 
+    public static bool bossLevel = false;
+    public static bool bossSpawned = false;
+    public static bool round2 = false;
+    public static bool mainPlatform = false;
+
+    public static int counter = 0;
+
+    private int i = 1;
+
     private Vector3 spawnPosition = Vector3.zero;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -21,9 +33,36 @@ public class PlatformSpawner : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        if (ScoreTracker.scoreTracker == 100)
+        {
+            bossLevel = true;
+            i = 1;
+        }
+
+        if ((ScoreTracker.scoreTracker >= 350) && (BossHealth.bossHealth > 0))
+        {
+            round2 = true;
+            BossController.bossComeBack = false;
+
+            bossLevel = true;
+            i = 1;
+        }
+
+        if (ScoreTracker.scoreTracker == 350)
+        {
+            bossSpawned = false;
+        }
+    }
+
+    private void SpawnInitialBossPlatform()
+    {
+        GameObject newPlatformGameObject = Instantiate(bossPlatform, spawnPosition, Quaternion.identity);
+
+        Platform platform = newPlatformGameObject.GetComponent<Platform>();
+
+        spawnPosition = platform.ConnectorPosition;
     }
 
     private void SpawnInitialPlatforms()
@@ -52,12 +91,44 @@ public class PlatformSpawner : MonoBehaviour
 
     private void SpawnPlatform()
     {
-        int index = Random.Range(0, platformPrefabs.Length);
-        GameObject newPlatformGameObject = Instantiate(platformPrefabs[index], spawnPosition, Quaternion.identity);
+        if (bossLevel == false)
+        {
+            int index = Random.Range(0, platformPrefabs.Length);
+            GameObject newPlatformGameObject = Instantiate(platformPrefabs[index], spawnPosition, Quaternion.identity);
 
 
-        Platform platform = newPlatformGameObject.GetComponent<Platform>();
-        spawnPosition = platform.ConnectorPosition;
+            Platform platform = newPlatformGameObject.GetComponent<Platform>();
+            spawnPosition = platform.ConnectorPosition;
+
+            
+        }
+
+        
+
+        if (bossLevel == true)
+        {
+            if (i == 1)
+            {
+                SpawnInitialBossPlatform();
+                i++;
+                Debug.Log("INITIAL BOSS PLATFORM SPAWNED");
+            }
+
+            GameObject newPlatformGameObject = Instantiate(bossPlatform, spawnPosition, Quaternion.identity);
+
+            Platform platform = newPlatformGameObject.GetComponent<Platform>();
+            
+            spawnPosition = platform.ConnectorPosition;
+
+            Debug.Log("BOSS PLATFORM SPAWNED");
+
+            if (bossSpawned == false)
+            {
+                Instantiate(boss, new Vector3(spawnPosition.x, spawnPosition.y + 3, spawnPosition.z), Quaternion.identity);
+                bossSpawned = true;
+                Debug.Log("BOSS SPAWNED");
+            }
+        }
     }
 
     private void OnPlaformLeftHandler(Platform platform)
@@ -69,5 +140,18 @@ public class PlatformSpawner : MonoBehaviour
 
         Debug.Log(message: "PLATFORM SPAWNED");
         SpawnPlatform();
+        mainPlatform = true;
+
+        if (ObstacleSpawner.obstacleSpawned == true)
+        {
+            mainPlatform = false;
+            ObstacleSpawner.obstacleSpawned = false;
+        }
+        
+        
+
+
+
+        ObstacleSpawner.randomZ += 8;    
     }
 }

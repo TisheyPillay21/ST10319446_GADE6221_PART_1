@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class Playercontroller : MonoBehaviour
 {
-    [SerializeField] private float speed = 10; 
+    [SerializeField] private float speed = 10;
+    private float saveSpeed;
+
     private Vector2 moveInput;
     private Rigidbody body; 
     [SerializeField] private float jumpHeight = 2;
@@ -16,9 +19,17 @@ public class Playercontroller : MonoBehaviour
     [SerializeField] private Vector3 groundCheckBoxSize = new Vector3(0.8f, 0.05f, 0.08f);
     [SerializeField] private LayerMask groundMask;
     private bool jumpPressed;
+
+    public static bool speedBoost = false;
+    public static float speedBoostTimer = 5;
+    public static bool timesTwoBoost = false;
+    public static float timesTwoBoostTimer = 10;
+
+    public static float playerPosX;
+    public static float playerPosZ;
     void Awake()
     {
-        body = GetComponent<Rigidbody>(); 
+        body = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -33,24 +44,82 @@ public class Playercontroller : MonoBehaviour
         if (ScoreTracker.scoreTracker == 100)
         {
             speed = 13;
+            saveSpeed = speed;
         }
 
         if (ScoreTracker.scoreTracker == 200)
         {
             speed = 17;
+            saveSpeed = speed;
         }
 
         if (ScoreTracker.scoreTracker == 350)
         {
             speed = 19;
+            saveSpeed = speed;
         }
 
         if (ScoreTracker.scoreTracker == 500)
         {
             speed = 21;
+            saveSpeed = speed;
+        }
+
+        if (speedBoost == true)
+        {
+            speed = 25;
+            speedBoostTimer -= Time.deltaTime;
+
+            if (speedBoostTimer < 1)
+            {
+                speedBoost = false;
+                speed = 10;
+            }
+        }
+
+        if (timesTwoBoost == true)
+        {
+            timesTwoBoostTimer -= Time.deltaTime;
+
+            if (timesTwoBoostTimer < 1)
+            {
+                timesTwoBoost = false;
+            }
         }
 
         transform.position += new Vector3(0, 0, speed * Time.deltaTime);
+        playerPosX = transform.position.x;
+        playerPosZ = transform.position.z;
+
+        if (PlatformSpawner.bossLevel == true)
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                transform.position += new Vector3(0, 0, 25 * Time.deltaTime);
+            }
+        }
+    }
+
+    private void OnEnable()
+    {
+        SpeedPickUp.OnSpeedPickupTriggered += OnSpeedPickupTriggeredHandler;
+        TimesTwoPickup.OnTimesTwoPickupTriggered += OnTimesTwoPickupTriggeredHandler;
+    }
+
+    private void OnDisable()
+    {
+        SpeedPickUp.OnSpeedPickupTriggered -= OnSpeedPickupTriggeredHandler;
+        TimesTwoPickup.OnTimesTwoPickupTriggered -= OnTimesTwoPickupTriggeredHandler;
+    }
+
+    private void OnSpeedPickupTriggeredHandler()
+    {
+        speedBoost = true;
+    }
+
+    private void OnTimesTwoPickupTriggeredHandler()
+    {
+        timesTwoBoost = true;
     }
 
     private void FixedUpdate()

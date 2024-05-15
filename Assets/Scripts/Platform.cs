@@ -7,8 +7,7 @@ public class Platform : MonoBehaviour
 {
     public delegate void PlatformLeftAction(Platform platform);
     public static event PlatformLeftAction OnPlatformLeft;
-    
-    
+
     [SerializeField] private Transform connector;
     public Vector3 ConnectorPosition => connector.position;
     

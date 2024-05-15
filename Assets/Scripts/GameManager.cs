@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
 
     private void OnPickupTriggered()
     {
+        if (Playercontroller.timesTwoBoost == true)
+        {
+            ScoreTracker.scoreTracker ++;
+        }
         ScoreTracker.scoreTracker++;
         Debug.Log("pickup triggered");
         OnScoreUpdate?.Invoke(ScoreTracker.scoreTracker);

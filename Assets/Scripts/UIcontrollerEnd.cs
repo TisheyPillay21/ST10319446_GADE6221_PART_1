@@ -26,6 +26,12 @@ public class UIcontrollerEnd : MonoBehaviour
     }
     public void OnStartClick()
     {
+        PlatformSpawner.levelCounter1 += 350;
+        PlatformSpawner.levelCounter2 += 600;
+        PlatformSpawner.levelCounter3 += 850;
+
+        BossHealth.levelsBeat = 0;
+
         ScoreTracker.scoreTracker = 0;
         Playercontroller.speedBoost = false;
         Playercontroller.speedBoostTimer = 5;

@@ -25,6 +25,10 @@ public class PlatformSpawner : MonoBehaviour
 
     public static int counter = 0;
 
+    public static int levelCounter1 = 350;
+    public static int levelCounter2 = 600;
+    public static int levelCounter3 = 850;
+
     private int i = 1;
 
     private Vector3 spawnPosition = Vector3.zero;
@@ -45,7 +49,7 @@ public class PlatformSpawner : MonoBehaviour
             i = 1;
         }
 
-        if ((ScoreTracker.scoreTracker >= 350) && (BossHealth.bossHealth > 0))
+        if ((ScoreTracker.scoreTracker >= levelCounter1) && (BossHealth.bossHealth > 0))
         {
             round2 = true;
             BossController.bossComeBack = false;
@@ -53,19 +57,21 @@ public class PlatformSpawner : MonoBehaviour
             bossLevel = true;
         }
 
-        if (ScoreTracker.scoreTracker == 350)
+        if (ScoreTracker.scoreTracker == levelCounter1)
         {
+            BossHealth.bossHealth = 3;
+
             i = 1;
             bossSpawned = false;
             BossController.bossIsInRange = false;
         }
 
-        if (ScoreTracker.scoreTracker == 410)
+        if (ScoreTracker.scoreTracker == levelCounter2)
         {
             level2 = true;
         }
 
-        if (ScoreTracker.scoreTracker == 700)
+        if (ScoreTracker.scoreTracker == levelCounter3)
         {
             bossLevel = true;
             i = 1;

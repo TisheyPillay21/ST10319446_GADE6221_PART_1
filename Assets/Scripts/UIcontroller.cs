@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class UIController : MonoBehaviour
@@ -14,6 +15,12 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI PowerUpTextMesh;
     [SerializeField] private TextMeshProUGUI bossHealthTextMesh;
     [SerializeField] private TextMeshProUGUI bossHealthBarTextMesh;
+
+    public GameObject pausePanel;
+
+    public AudioSource pauseSound;
+    public AudioSource gameSound;
+    public AudioSource click;
 
     private void OnEnable()
     {
@@ -28,23 +35,23 @@ public class UIController : MonoBehaviour
     private void OnScoreUpdatedHandler(int score)
     {
         Debug.Log(message: "UI is now aware of the score update");
-        scoreTextMesh.text = "SCORE " + score; 
+        scoreTextMesh.text = "Score " + score; 
     }
     void Start()
     {
-        
+        pauseSound.Stop();
     }
 
     // Update is called once per frame
     void Update()
     {
-        scoreTextMesh.text = "SCORE " + ScoreTracker.scoreTracker;
+        scoreTextMesh.text = "Score " + ScoreTracker.scoreTracker;
 
         if (PlatformSpawner.bossLevel == true)
         {
             bossInstructionsTextMesh.text = "Press The 'SpaceBar' To Speed Up And Knock The Boss";
-            bossLevelTextMesh.text = "BOSS LEVEL";
-            bossHealthTextMesh.text = "BOSS HEALTH";
+            bossLevelTextMesh.text = "Boss Level";
+            bossHealthTextMesh.text = "Boss Health";
 
             if (BossHealth.bossHealth == 6)
             {
@@ -86,20 +93,43 @@ public class UIController : MonoBehaviour
 
         if (Playercontroller.speedBoost == true)
         {
-            PowerUpTextMesh.text = "SPEED BOOST " + Playercontroller.speedBoostTimer + " SECONDS";
-        }
-        else
-        {
-            PowerUpTextMesh.text = "";
+            PowerUpTextMesh.text = "Speed Boost " + Playercontroller.speedBoostTimer + " Seconds";
         }
 
         if (Playercontroller.timesTwoBoost == true)
         {
-            PowerUpTextMesh.text = "MULTIPLIER BOOST " + Playercontroller.timesTwoBoostTimer + " SECONDS";
+            PowerUpTextMesh.text = "Coin Multiplier " + Playercontroller.timesTwoBoostTimer + " Seconds";
         }
-        else
+
+        if (Playercontroller.timesTwoBoost == false &&  Playercontroller.speedBoost == false)
         {
             PowerUpTextMesh.text = "";
         }
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            pausePanel.SetActive(true);
+            Time.timeScale = 0;
+
+            click.Play();
+            gameSound.Pause();
+            pauseSound.Play();
+        }
+    }
+
+    public void OnResumeClick()
+    {
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
+
+        click.Play();
+        pauseSound.Stop();
+        gameSound.Play();
+    }
+
+    public void OnEndGameClick()
+    {
+        click.Play();
+        SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
     }
 }

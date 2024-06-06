@@ -13,20 +13,24 @@ public class BossShootingController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (PlatformSpawner.round2 == true)
+        if (BossController.bossIsInRange == true)
         {
-            _time += Time.fixedDeltaTime;
-
-            if (_time >= timeBetweenShots)
+            if (PlatformSpawner.round2 == true)
             {
-                // Create a bullet.
-                var bulletObject = Instantiate(bulletPrefab, new Vector3(transform.position.x, transform.position.y + 0.9f, transform.position.z - 2), Quaternion.identity);
-                Debug.Log("BULLET CREATED");
+                _time += Time.fixedDeltaTime;
 
-                // Set it to expire on a timer.
-                Destroy(bulletObject, rangeSeconds);
+                if (_time >= timeBetweenShots)
+                {
 
-                _time = 0;
+                    // Create a bullet.
+                    var bulletObject = Instantiate(bulletPrefab, new Vector3(transform.position.x, transform.position.y + 0.9f, transform.position.z - 2), Quaternion.identity);
+                    Debug.Log("BULLET CREATED");
+
+                    // Set it to expire on a timer.
+                    Destroy(bulletObject, rangeSeconds);
+
+                    _time = 0;
+                }
             }
         }
     }

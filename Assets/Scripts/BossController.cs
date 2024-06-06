@@ -14,24 +14,24 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ScoreTracker.scoreTracker == 100)
+        if (ScoreTracker.scoreTracker > 99)
         {
             speed = 13;
         }
 
-        if (ScoreTracker.scoreTracker == 200)
+        if (ScoreTracker.scoreTracker > 199)
         {
-            speed = 17;
+            speed = 16;
         }
 
-        if (ScoreTracker.scoreTracker == 350)
+        if (ScoreTracker.scoreTracker > 349)
         {
-            speed = 19;
+            speed = 18;
         }
 
-        if (ScoreTracker.scoreTracker == 500)
+        if (ScoreTracker.scoreTracker > 499)
         {
-            speed = 21;
+            speed = 20;
         }
 
         if (bossIsInRange == true)
@@ -41,17 +41,37 @@ public class BossController : MonoBehaviour
                 transform.position += new Vector3(Playercontroller.playerPosX * Time.deltaTime, 0, speed * Time.deltaTime);
             }
 
-            if (beenHit == true || Playercontroller.playerPosZ > transform.position.z)
+            if (PlatformSpawner.level2 == false)
             {
-                if ((BossHealth.bossHealth == 3) && (ScoreTracker.scoreTracker < 350))
+                if (beenHit == true || Playercontroller.playerPosZ > transform.position.z)
                 {
-                    transform.position += new Vector3(Playercontroller.playerPosX * Time.deltaTime, 0, 50 * Time.deltaTime);
-                    Destroy(gameObject, 3f);
-                    Debug.Log("BOSS DESTROYED");
+                    if ((BossHealth.bossHealth == 3) && (ScoreTracker.scoreTracker < 350))
+                    {
+                        transform.position += new Vector3(Playercontroller.playerPosX * Time.deltaTime, 0, 50 * Time.deltaTime);
+                        Destroy(gameObject, 3f);
+                        Debug.Log("BOSS DESTROYED");
 
-                    PlatformSpawner.bossLevel = false;
+                        PlatformSpawner.bossLevel = false;
+                    }
+                    else
+                    {
+                        transform.position += new Vector3(Playercontroller.playerPosX * Time.deltaTime, 0, 50 * Time.deltaTime);
+
+                        if (transform.position.z >= (Playercontroller.playerPosZ + 20))
+                        {
+                            beenHit = false;
+                        }
+                    }
+
+                    if ((BossHealth.bossHealth == 3) && (PlatformSpawner.bossLevel = false))
+                    {
+                        bossComeBack = true;
+                    }
                 }
-                else
+            }
+            else
+            {
+                if (beenHit == true || Playercontroller.playerPosZ > transform.position.z)
                 {
                     transform.position += new Vector3(Playercontroller.playerPosX * Time.deltaTime, 0, 50 * Time.deltaTime);
 
@@ -59,11 +79,6 @@ public class BossController : MonoBehaviour
                     {
                         beenHit = false;
                     }
-                }
-
-                if ((BossHealth.bossHealth == 3) && (PlatformSpawner.bossLevel = false))
-                {
-                    bossComeBack = true;
                 }
             }
         }

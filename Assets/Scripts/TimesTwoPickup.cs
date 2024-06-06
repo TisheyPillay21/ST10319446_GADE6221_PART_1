@@ -17,4 +17,12 @@ public class TimesTwoPickup : MonoBehaviour
         Destroy(gameObject);
 
     }
+
+    private void Update()
+    {
+        if (transform.position.z < (Playercontroller.playerPosZ - 10))
+        {
+            Destroy(gameObject);
+        }
+    }
 }

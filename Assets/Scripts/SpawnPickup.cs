@@ -8,7 +8,7 @@ public class SpawnPickup : MonoBehaviour
     [SerializeField] private int initalObstacleCount = 20;
 
     private Vector3 spawnPosition = Vector3.zero;
-    public static int randomZ3 = 20;
+    public static int randomZ3 = 24;
 
     private void SpawnPickups()
     {
@@ -16,7 +16,7 @@ public class SpawnPickup : MonoBehaviour
 
         spawnPosition = new Vector3(randomX, 0, randomZ3);
 
-        randomZ3 += 50;
+        randomZ3 += 400;
 
         int index = Random.Range(0, pickup.Length);
 
@@ -25,6 +25,17 @@ public class SpawnPickup : MonoBehaviour
 
         Debug.Log("OBSTACLE SPAWNED");
     }
+
+    private void OnEnable()
+    {
+        Platform.OnPlatformLeft += OnPlaformLeftHandler;
+    }
+
+    private void OnDisable()
+    {
+        Platform.OnPlatformLeft -= OnPlaformLeftHandler;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,5 +46,24 @@ public class SpawnPickup : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnPlaformLeftHandler(Platform platform)
+    {
+        Debug.Log("PLATFORM LEFT TRIGGERED");
+
+        if (randomZ3 < (Playercontroller.playerPosZ + 160))
+        {
+            Debug.Log("RANDOMZ LESS THAN PLATFORM");
+
+            if (PlatformSpawner.bossLevel == false)
+            {
+                SpawnPickups();
+            }
+            else
+            {
+                randomZ3 += 400;
+            }
+        }
     }
 }

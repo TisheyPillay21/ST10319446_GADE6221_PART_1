@@ -17,7 +17,22 @@ public class Obstacle : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        
-        SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+        if (Playercontroller.speedBoost == false)
+        {
+            SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+        }
+        else
+        {
+            ScoreTracker.scoreTracker += 1;
+            Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (transform.position.z < (Playercontroller.playerPosZ - 10))
+        {
+            Destroy(gameObject);
+        }
     }
 }

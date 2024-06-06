@@ -19,6 +19,13 @@ public class Playercontroller : MonoBehaviour
     [SerializeField] private Vector3 groundCheckBoxSize = new Vector3(0.8f, 0.05f, 0.08f);
     [SerializeField] private LayerMask groundMask;
     private bool jumpPressed;
+    private bool keyPressed = false;
+
+    public AudioSource hitCoin;
+    public AudioSource hitPickup;
+    public AudioSource hitBoss;
+    public AudioSource boost;
+    public AudioSource hitObstacle;
 
     public static bool speedBoost = false;
     public static float speedBoostTimer = 5;
@@ -40,29 +47,31 @@ public class Playercontroller : MonoBehaviour
         //{
         //    jumpPressed = true;
         //}
-        
-        if (ScoreTracker.scoreTracker == 100)
+        if (speedBoost == false)
         {
-            speed = 13;
-            saveSpeed = speed;
-        }
+            if (ScoreTracker.scoreTracker > 99)
+            {
+                speed = 13;
+                saveSpeed = speed;
+            }
 
-        if (ScoreTracker.scoreTracker == 200)
-        {
-            speed = 17;
-            saveSpeed = speed;
-        }
+            if (ScoreTracker.scoreTracker > 199)
+            {
+                speed = 16;
+                saveSpeed = speed;
+            }
 
-        if (ScoreTracker.scoreTracker == 350)
-        {
-            speed = 19;
-            saveSpeed = speed;
-        }
+            if (ScoreTracker.scoreTracker > 349)
+            {
+                speed = 18;
+                saveSpeed = speed;
+            }
 
-        if (ScoreTracker.scoreTracker == 500)
-        {
-            speed = 21;
-            saveSpeed = speed;
+            if (ScoreTracker.scoreTracker > 499)
+            {
+                speed = 20;
+                saveSpeed = speed;
+            }
         }
 
         if (speedBoost == true)
@@ -74,6 +83,7 @@ public class Playercontroller : MonoBehaviour
             {
                 speedBoost = false;
                 speed = 10;
+                speedBoostTimer = 5;
             }
         }
 
@@ -84,6 +94,7 @@ public class Playercontroller : MonoBehaviour
             if (timesTwoBoostTimer < 1)
             {
                 timesTwoBoost = false;
+                timesTwoBoostTimer = 10;
             }
         }
 
@@ -164,4 +175,26 @@ public class Playercontroller : MonoBehaviour
         return (2 * jumpHeight) / (time * time);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Coin"))
+        {
+            hitCoin.Play();
+        }
+
+        if (other.CompareTag("Pickup"))
+        {
+            hitPickup.Play();
+        }
+
+        if (other.CompareTag("Boss"))
+        {
+            hitBoss.Play();
+        }
+
+        if (other.CompareTag("Obstacle"))
+        {
+            hitObstacle.Play();
+        }
+    }
 }

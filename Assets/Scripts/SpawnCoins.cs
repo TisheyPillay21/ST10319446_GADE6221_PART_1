@@ -32,6 +32,17 @@ public class SpawnCoins : MonoBehaviour
         Debug.Log("OBSTACLE SPAWNED");
         
     }
+
+    private void OnEnable()
+    {
+        Platform.OnPlatformLeft += OnPlaformLeftHandler;
+    }
+
+    private void OnDisable()
+    {
+        Platform.OnPlatformLeft -= OnPlaformLeftHandler;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +51,11 @@ public class SpawnCoins : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+
+    }
+
+    private void OnPlaformLeftHandler(Platform platform)
     {
         SpawnTokens();
     }

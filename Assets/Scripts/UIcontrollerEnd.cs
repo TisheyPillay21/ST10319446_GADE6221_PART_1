@@ -7,10 +7,11 @@ using UnityEngine.SceneManagement;
 public class UIcontrollerEnd : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI endScoreMesh;
+    public AudioSource click;
 
     private void Start()
     {
-        endScoreMesh.text = "VELOCITY VORTEX Your Score Is "+ ScoreTracker.scoreTracker;
+        endScoreMesh.text = "Velocity Vortex Your Score Is "+ ScoreTracker.scoreTracker;
 
         BossController.bossIsInRange = false;
         PlatformSpawner.bossLevel = false;
@@ -19,7 +20,7 @@ public class UIcontrollerEnd : MonoBehaviour
 
         ObstacleSpawner.randomZ = 13;
         SpawnCoins.randomZ2 = 3;
-        SpawnPickup.randomZ3 = 20;
+        SpawnPickup.randomZ3 = 24;
 
         BossHealth.bossHealth = 6;
     }
@@ -27,12 +28,19 @@ public class UIcontrollerEnd : MonoBehaviour
     {
         ScoreTracker.scoreTracker = 0;
         Playercontroller.speedBoost = false;
+        Playercontroller.speedBoostTimer = 5;
         Playercontroller.timesTwoBoost = false;
+        Playercontroller.timesTwoBoostTimer = 10;
+        PlatformSpawner.level2 = false;
+
+        click.Play();
+
         SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Single);
     }
 
     public void OnExitClick() 
     { 
+        click.Play();
         Application.Quit();
     }
 }

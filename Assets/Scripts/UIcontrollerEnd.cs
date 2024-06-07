@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Proyecto26;
 
 public class UIcontrollerEnd : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI endScoreMesh;
     public AudioSource click;
+
+    public GameObject leaderboardPanel;
 
     private void Start()
     {
@@ -26,6 +29,10 @@ public class UIcontrollerEnd : MonoBehaviour
     }
     public void OnStartClick()
     {
+        Time.timeScale = 1;
+
+        Obstacle.isDead = false;
+
         PlatformSpawner.levelCounter1 = 350;
         PlatformSpawner.levelCounter2 = 600;
         PlatformSpawner.levelCounter3 = 850;
@@ -48,5 +55,15 @@ public class UIcontrollerEnd : MonoBehaviour
     { 
         click.Play();
         Application.Quit();
+    }
+
+    public void OnLeaderboardClick()
+    {
+        leaderboardPanel.SetActive(true);
+    }
+    
+    public void OnCloseClick()
+    {
+        leaderboardPanel.SetActive(false);
     }
 }

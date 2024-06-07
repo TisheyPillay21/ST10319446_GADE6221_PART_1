@@ -10,6 +10,8 @@ public class Obstacle : MonoBehaviour
     public delegate void ObstacleTriggeredAction();
     public static event ObstacleTriggeredAction OnObstacleTriggered;
 
+    public static bool isDead = false;
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(message : "Hit obstacle");
@@ -19,11 +21,12 @@ public class Obstacle : MonoBehaviour
 
         if (Playercontroller.speedBoost == false)
         {
-            SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+            Time.timeScale = 0;
+            isDead = true;
         }
         else
         {
-            ScoreTracker.scoreTracker += 1;
+            ScoreTracker.scoreTracker += 3;
             Destroy(gameObject);
         }
     }

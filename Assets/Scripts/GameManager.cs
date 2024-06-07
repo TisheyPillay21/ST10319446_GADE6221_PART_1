@@ -48,5 +48,10 @@ public class GameManager : MonoBehaviour
         OnScoreUpdate?.Invoke(ScoreTracker.scoreTracker);
     }
 
-   
+    public void SaveValues()
+    {
+        //PlayerPrefs.SetFloat("Name");
+        PlayerPrefs.SetFloat("Levels Passed", BossHealth.levelsBeat);
+        PlayerPrefs.SetFloat("Score", ScoreTracker.scoreTracker);
+    }
 }

@@ -76,7 +76,7 @@ public class Playercontroller : MonoBehaviour
 
         if (speedBoost == true)
         {
-            speed = 25;
+            speed = 30;
             speedBoostTimer -= Time.deltaTime;
 
             if (speedBoostTimer < 1)

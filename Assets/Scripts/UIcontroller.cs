@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Proyecto26;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,10 +18,19 @@ public class UIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bossHealthBarTextMesh;
 
     public GameObject pausePanel;
+    public GameObject savePanel;
+
+    public static string name;
+    public TMP_InputField saveName;
 
     public AudioSource pauseSound;
     public AudioSource gameSound;
     public AudioSource click;
+
+    public void Awake()
+    {
+        
+    }
 
     private void OnEnable()
     {
@@ -39,6 +49,7 @@ public class UIController : MonoBehaviour
     }
     void Start()
     {
+        //savePanel.SetActive(false);
         pauseSound.Stop();
     }
 
@@ -115,6 +126,11 @@ public class UIController : MonoBehaviour
             gameSound.Pause();
             pauseSound.Play();
         }
+
+        if (Obstacle.isDead == true)
+        {
+            savePanel.SetActive(true); 
+        }
     }
 
     public void OnResumeClick()
@@ -130,6 +146,25 @@ public class UIController : MonoBehaviour
     public void OnEndGameClick()
     {
         click.Play();
+        SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+    }
+
+    public void OnSaveClick()
+    {
+        savePanel.SetActive(false);
+
+        name = saveName.text;
+
+        FirebaseUser firebaseUser = new FirebaseUser();
+
+        RestClient.Put("https://gamebase-46691-default-rtdb.firebaseio.com/" + name + ".json", firebaseUser);
+
+        SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+    }
+
+    public void OnCancelClick()
+    {
+        savePanel.SetActive(false);
         SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
     }
 }

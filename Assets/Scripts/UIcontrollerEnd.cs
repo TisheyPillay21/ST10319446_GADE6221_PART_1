@@ -26,9 +26,9 @@ public class UIcontrollerEnd : MonoBehaviour
     }
     public void OnStartClick()
     {
-        PlatformSpawner.levelCounter1 += 350;
-        PlatformSpawner.levelCounter2 += 600;
-        PlatformSpawner.levelCounter3 += 850;
+        PlatformSpawner.levelCounter1 = 350;
+        PlatformSpawner.levelCounter2 = 600;
+        PlatformSpawner.levelCounter3 = 850;
 
         BossHealth.levelsBeat = 0;
 
